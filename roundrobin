@@ -1,0 +1,108 @@
+#include<stdio.h>
+
+int main(void)
+{
+    // n = number of process
+    // quantum_time means the minimum time required for a process to execute
+    int n, quantum_time;
+
+    // utility variables
+    // count increments when a process is complete
+    int i, count = 0, tmp, sq = 0;
+
+    // arrays
+    // burst time: time required by a process for its execution
+    // waiting time: time spend by process in the ready state waiting for the CPU
+    //*** turn around time = waiting time + burst time
+    int burst_time[10], waiting_time[10], turnaround_time[10], remaining_burst_time[10];
+
+    // float type: average variables
+    float avg_waiting_time = 0, avg_turnaround_time = 0;
+
+    // get input from the user
+
+    // get the number of processes
+    printf("Enter the Number of Processes: ");
+    scanf("%d", &n);
+
+    // for each process, get burst time
+    printf("Enter the Burst Time of Processes (in order): \n");
+    for (i = 0; i < n; i++)
+    {
+        scanf("%d", &burst_time[i]);
+
+        // *initially* jevda burst time aahe tevdach remaining burst time pn aahe
+        remaining_burst_time[i] = burst_time[i];
+    }
+
+    // get quantum time
+    printf("Enter the Quantum Time: ");
+    scanf("%d", &quantum_time);
+    
+    // actual program
+    while(1)
+    {
+        for(i = 0, count = 0; i < n; i++)
+        {
+            tmp = quantum_time;
+
+            // rbt = 0
+            // process has been executed successfully, count++
+            if(remaining_burst_time[i]==0)
+            {
+                count++;
+                continue;
+            }
+
+            // rbt > quantum time
+            // if process execute nahi zalay, execute hoycha baki aahe
+            if(remaining_burst_time[i] > quantum_time)
+                // rbt se quantum time minus karlo
+                remaining_burst_time[i] = remaining_burst_time[i] - quantum_time;
+            else if(remaining_burst_time[i]>=0)
+            {
+                // nahito tmp = rbt and rbt ko 0 kardo
+                tmp = remaining_burst_time[i];
+                remaining_burst_time[i] = 0;
+            }
+
+            // turn around time
+            sq = sq + tmp;
+            turnaround_time[i] = sq;
+        }
+
+        // exit for
+
+        // n == count, all processes executed successfully
+        if (n == count)
+            break;
+    }
+
+    printf("\nProcess\tBurst Time\tTurnaround Time\tWaiting Time\n");
+    //*** turn around time = waiting time + burst time
+    // waiting time = turn around time - burst time
+
+    for(i = 0; i < n; i++)
+    {
+        waiting_time[i] = turnaround_time[i] - burst_time[i];
+        // store the sum of all waiting times in avg waiting time
+        avg_waiting_time += waiting_time[i];
+        // store the sum of all turn around times in avg turnaround time
+        avg_turnaround_time += turnaround_time[i];
+        
+        // print
+        // everything is %d here, in the order of line 81
+        printf("\nP[%d]\t%d\t\t%d\t\t%d", i+1, burst_time[i], turnaround_time[i], waiting_time[i]); 
+        
+    }
+    // exit for
+    // take avg of waiting time and turn around time
+    avg_waiting_time/=n;
+    avg_turnaround_time/=n;
+     
+    // print them
+    printf("\nAverage Waiting Time: %f", avg_waiting_time);
+    printf("\nAverage Turnaround Time: %f\n", avg_turnaround_time);
+
+    return 0;
+}
