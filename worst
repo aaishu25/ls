@@ -1,0 +1,68 @@
+#include<stdio.h>
+#define MAX 25
+
+void main() {
+    
+    // fragments, blocks, processes
+    // number of blocks and processes
+    // i j temp
+    // HIGHEST (WORST)
+    int frag[MAX], b[MAX], p[MAX], i, j, nb, np, temp, highest=0;
+
+    // block array and process array
+    static int bp[MAX], pp[MAX];
+
+    // take input
+    printf("\nEnter the number of blocks: ");
+    scanf("%d", &nb);
+
+    printf("Enter the number of Process: ");
+    scanf("%d", &np);
+
+    printf("\nEnter the size of the blocks: \n");
+    for(i = 1; i <= nb; i++) {
+        printf("Block %d: ", i);
+        scanf("%d", &b[i]);
+    }
+
+    printf("\nEnter the size of the Process: \n");
+    for(i = 1; i <= np; i++) {
+        printf("Process %d: ", i);
+        scanf("%d", &p[i]);
+    }
+
+    // IP: i for processes
+    // JB: j for blocks
+    for(i=1;i<=np;i++) {
+
+        for(j=1;j<=nb;j++) {
+
+            //if bp[j] is not allocated 
+            if(bp[j]!=1) { 
+
+                temp = b[j] - p[i]; // internal fragmentation in temp
+
+                // temp >= 0
+                // highest < temp
+                if(temp >= 0 && highest < temp) {
+                    pp[i]=j;
+                    highest=temp;
+                }
+                
+            }
+        }
+
+        frag[i] = highest;
+        bp[pp[i]] = 1;
+        highest = 0;
+
+    }
+
+    printf("\nProcess no.  \tProcess size  \tBlock no.  \tBlock size  \tFragment\n");
+
+    for(i=1;i<=np;i++)
+        printf("\n%d\t\t%d\t\t%d\t\t%d\t\t%d", i, p[i], pp[i], b[pp[i]], frag[i]);
+    
+    printf("\n");
+
+}
