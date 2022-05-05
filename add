@@ -1,0 +1,12 @@
+echo "Enter A"
+read A
+echo "Enter B"
+read B
+
+ADD() 
+{
+    RES=$((A+B))
+    echo $RES
+}
+
+ADD
