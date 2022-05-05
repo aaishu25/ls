@@ -1,0 +1,14 @@
+echo "Enter A"
+read A
+echo "Enter B"
+read B
+echo "Enter C" 
+read C
+
+if [ $A -eq $B ] && [ $A -eq $C ]; then 
+    echo "Equilateral"
+elif [ $A -eq $B ] || [ $A -eq $C ] || [ $B -eq $C ]; then
+    echo "Isoceles"
+else   
+    echo "Scalene"
+fi
